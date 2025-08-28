@@ -12,7 +12,7 @@ import json, re, shutil, time
 from pathlib import Path
 
 # ============ 只改这一行：当前要处理的网站目录（例如 g40 / g50） ============
-ACTIVE_SITE = Path(r"D:/项目/g5").resolve()
+ACTIVE_SITE = Path(r".").resolve()
 # ======================================================================
 
 CONFIG_FILE = Path("ads_mapping.json")  # 配置文件与脚本同级

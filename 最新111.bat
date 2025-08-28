@@ -12,6 +12,10 @@ cd ..
 echo 🌐 正在执行网页生成 + SEO 插入...
 call run_all.bat
 
+REM === 插入广告 ===
+echo 💰 正在插入广告...
+python ads_apply_all.py
+
 REM === SEO修复 ===
 echo 🔧 正在执行SEO修复...
 python seo_fixer_v4.py
