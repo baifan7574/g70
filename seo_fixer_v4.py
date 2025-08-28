@@ -39,6 +39,21 @@ def generate_random_text(keyword="photo"):
     ]
     return " ".join([random.choice(templates) for _ in range(2)])
 
+# ===== 分类页长文本补丁 =====
+def add_category_text(soup, file):
+    name = file.stem
+    if name.startswith("page"):   # 判断是 pageN.html
+        if len(soup.get_text()) < 150:
+            p = soup.new_tag("p")
+            p.string = (
+                f"This is {name}, part of our curated gallery collection. "
+                f"Each page highlights unique themes, aesthetics, and visual styles, "
+                f"helping visitors explore different categories with richer context and inspiration."
+            )
+            soup.body.append(p)
+            return True
+    return False
+
 # ===== 内链补丁（优先同目录） =====
 def add_internal_links(soup, all_files, current_file):
     same_dir = [f for f in all_files if f.parent == current_file.parent and f != current_file]
@@ -135,12 +150,16 @@ for file in html_files:
             if not img.get("alt"):
                 img["alt"] = file.stem
 
-        # 长文本补丁
+        # 普通页面长文本补丁
         if len(soup.get_text()) < 200:
             p = soup.new_tag("p")
             p.string = generate_random_text(file.stem)
             soup.body.append(p)
             log_file.write(f"[TEXT] Added paragraph to {file}\n")
+
+        # 分类页长文本补丁
+        if add_category_text(soup, file):
+            log_file.write(f"[CAT] Added category text to {file}\n")
 
         # 内链补丁
         add_internal_links(soup, html_files, file)
